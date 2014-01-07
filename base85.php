@@ -1,5 +1,9 @@
 <?PHP
 
+// Examples:
+// $str = base85::encode("Hello world!");
+// $str = base85::decode(":e4D*;K$&\Er");
+
 class base85 
 {
 
