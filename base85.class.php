@@ -31,7 +31,7 @@ class base85
 				$tmp += $item - 33;
 			}
 
-			// Conver the integer in to a string
+			// Convert the integer in to a string
 			$ret .= pack('N', $tmp);
 
 
