@@ -7,20 +7,20 @@ run_tests();
 /////////////////////////////////////////////////////////////////
 
 function run_tests() {
-	my_test('The quick brown fox jumps over the lazy dog.','<+ohcEHPu*CER),Dg-(AAoDo:C3=B4F!,CEATAo8BOr<&@=!2AA8c*5');
-	my_test("Hello world",'87cURD]j7BEbo7');
+	run_test('The quick brown fox jumps over the lazy dog.','<+ohcEHPu*CER),Dg-(AAoDo:C3=B4F!,CEATAo8BOr<&@=!2AA8c*5');
+	run_test("Hello world",'87cURD]j7BEbo7');
 
-	my_test('D9uWjh[','6ofBkC1pf');
-	my_test('JCINaFj]b','8jc0F@7G!;@K');
-	my_test('knQKwu','CMm!BGBE');
-	my_test('F9IXlmG','7QF%BCi)Z');
+	run_test('D9uWjh[','6ofBkC1pf');
+	run_test('JCINaFj]b','8jc0F@7G!;@K');
+	run_test('knQKwu','CMm!BGBE');
+	run_test('F9IXlmG','7QF%BCi)Z');
 
 	// Raw non-printable data
 	$bytes = base64_decode("Ho4q/TxtN3xiKfBafvdtkFAYAZ4=");
-	my_test($bytes,'*f_`K4Dd$)@O^eMIeR]@:`\'5)');
+	run_test($bytes,'*f_`K4Dd$)@O^eMIeR]@:`\'5)');
 }
 
-function my_test($str,$result) {
+function run_test($str,$result) {
 	$enc     = base85::encode($str);
 	$correct = intval($result == $enc);
 	$raw_str = $str;
