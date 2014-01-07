@@ -7,7 +7,7 @@ run_tests();
 /////////////////////////////////////////////////////////////////
 
 function run_tests() {
-	my_test('The quick brown fow jumps over the lazy dog.','<+ohcEHPu*CER),Dg-(AAoDl9C3=B4F!,CEATAo8BOr<&@=!2AA8c*5');
+	my_test('The quick brown fox jumps over the lazy dog.','<+ohcEHPu*CER),Dg-(AAoDo:C3=B4F!,CEATAo8BOr<&@=!2AA8c*5');
 	my_test("Hello world",'87cURD]j7BEbo7');
 
 	my_test('D9uWjh[','6ofBkC1pf');
