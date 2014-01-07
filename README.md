@@ -1,4 +1,17 @@
-php-base85
+PHP Base85
 ==========
 
-PHP Base85 library
+A pure PHP extension to encode and decode data with [base85](http://en.wikipedia.org/wiki/Ascii85).
+
+Usage:
+------
+```PHP
+require("/path/to/base85.class.php");
+
+$encoded = base85::encode("Base85 is pretty cool");
+$decoded = base85::decode(":e4D*;K$&\Er");
+```
+
+**Note:** There is a PHP extension written in C also named [php-base85](https://github.com/raducu/php-base85).
+This library is most likely faster, but may be harder to install (requires 
+the ability to load extensions).
