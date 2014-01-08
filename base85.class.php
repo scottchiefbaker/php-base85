@@ -1,5 +1,7 @@
 <?PHP
 
+#error_reporting(E_ALL);
+
 // Examples:
 // $str = base85::encode("Hello world!");
 // $str = base85::decode(":e4D*;K$&\Er");
