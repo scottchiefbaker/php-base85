@@ -13,5 +13,5 @@ $decoded = base85::decode(":e4D*;K$&\Er");
 ```
 
 **Note:** There is a PHP extension written in C also named [php-base85](https://github.com/raducu/php-base85).
-This library is most likely faster, but may be harder to install (requires 
+That library is most likely faster, but may be harder to install (requires 
 the ability to load extensions).
