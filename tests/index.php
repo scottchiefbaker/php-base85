@@ -7,6 +7,12 @@ run_tests();
 /////////////////////////////////////////////////////////////////
 
 function run_tests() {
+	run_test("\0",'!!');
+	run_test("food\0bat",'AoDTu!+KAY');
+	run_test('    ','y');
+	run_test(' ','+9');
+	run_test(str_repeat("\0",4),'z');
+
 	run_test('The quick brown fox jumps over the lazy dog.','<+ohcEHPu*CER),Dg-(AAoDo:C3=B4F!,CEATAo8BOr<&@=!2AA8c*5');
 	run_test("Hello world",'87cURD]j7BEbo7');
 
