@@ -70,7 +70,7 @@ class base85
 			}
 
 			// Four spaces has a shortcut of 'y'
-			if ($chunk == unpack('N', '    ')) {
+			if ($chunk == 538976288) {
 				$ret .= "y";
 				continue;
 			}
