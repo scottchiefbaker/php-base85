@@ -12,6 +12,7 @@ function run_tests() {
 	run_test('    ','y');
 	run_test(' ','+9');
 	run_test(str_repeat("\0",4),'z');
+	run_test("bird\0\0\0\0bath",'@VKjnz@UX@l');
 
 	run_test('The quick brown fox jumps over the lazy dog.','<+ohcEHPu*CER),Dg-(AAoDo:C3=B4F!,CEATAo8BOr<&@=!2AA8c*5');
 	run_test("Hello world",'87cURD]j7BEbo7');
