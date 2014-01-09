@@ -73,3 +73,31 @@ function run_test($str,$result) {
 	print "<br />";
 	print "<br />";
 }
+
+function raw_dump($raw,$format = "dec",$printable = 0) {
+	$str   = unpack("H*hex",$raw);
+	$bytes = str_split($str['hex'],2);
+
+	foreach ($bytes as &$i) {
+		$i = "0x$i"; // Hex representation
+
+		// Convert the hex to decimal
+		if ($format != 'hex') {
+			$i = hexdec($i);
+		}
+
+		$char = chr($i);
+
+		if ($printable) {
+			if (!ctype_print($char)) {
+				$char = "";
+			}
+
+			$i .= " [<b>$char</b>]";
+		}
+	}
+
+	$ret = join(" ",$bytes);
+
+	return $ret;
+}
