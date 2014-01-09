@@ -94,6 +94,7 @@ class base85
 
 		// If we added some null bytes, we remove them from the final string
 		if ($padding) {
+			$ret = preg_replace("/z$/",'!!!!!',$ret);
 			$ret = substr($ret,0,strlen($ret) - $padding);
 		}
 
