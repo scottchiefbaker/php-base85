@@ -42,7 +42,6 @@ function run_test($str,$result) {
 
 	$str = printable_version($str);
 
-	print "<div>Testing: $str</div>\n";
 	print "<span style=\"background-color: $color\">Encode: $str => \"$enc\"</span>\n";
 	print "<br />";
 
