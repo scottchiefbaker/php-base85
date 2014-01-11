@@ -68,11 +68,11 @@ function printable_version($str) {
 	if (!ctype_print($str)) {
 		$ret = "<code><b>" . raw_dump($str,'hex') . "</b></code>";
 	} else {
+		$str = htmlentities($str);
+
 		if (preg_match("/  /",$str)) {
 			$str = preg_replace("/ /","&#9251;",$str);
 		}
-
-		$str = htmlentities($str);
 		$ret = "\"$str\"";
 	}
 
