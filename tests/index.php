@@ -33,7 +33,6 @@ function run_test($str,$result) {
 	$raw_str = $str;
 
 	$enc = htmlentities($enc);
-	$str = htmlentities($str);
 
 	if ($correct) {
 		$color = "lightgreen";
@@ -41,11 +40,7 @@ function run_test($str,$result) {
 		$color = "red";
 	}
 
-	if (!ctype_print($str)) {
-		$str = "<code><b>" . md5($str) . "</b></code>";
-	} else {
-		$str = "\"$str\"";
-	}
+	$str = printable_version($str);
 
 	print "<div>Testing: $str</div>\n";
 	print "<span style=\"background-color: $color\">Encode: $str => \"$enc\"</span>\n";
@@ -61,17 +56,28 @@ function run_test($str,$result) {
 	}
 
 	$result  = htmlentities($result);
-	$decoded = htmlentities($decoded);
-
-	if (!ctype_print($decoded)) {
-		$decoded = "<code><b>" . md5($decoded) . "</b></code>";
-	} else {
-		$decoded = "\"$decoded\"";
-	}
+	$decoded = printable_version($decoded);
 
 	print "<span style=\"background-color: $color\">Decode: \"$result\" => $decoded</span>\n";
 	print "<br />";
 	print "<br />";
+}
+
+function printable_version($str) {
+	$ret = '';
+
+	if (!ctype_print($str)) {
+		$ret = "<code><b>" . raw_dump($str,'hex') . "</b></code>";
+	} else {
+		if (preg_match("/  /",$str)) {
+			$str = preg_replace("/ /","&#9251;",$str);
+		}
+
+		$str = htmlentities($str);
+		$ret = "\"$str\"";
+	}
+
+	return $ret;
 }
 
 function raw_dump($raw,$format = "dec",$printable = 0) {

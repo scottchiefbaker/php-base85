@@ -36,7 +36,6 @@ class base85
 			// Convert the integer in to a string
 			$ret .= pack('N', $tmp);
 
-
 			$num++;
 		}
 
