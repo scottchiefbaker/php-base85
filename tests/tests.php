@@ -6,10 +6,13 @@ require($file);
 $pass_count = 0;
 $fail_count = 0;
 
-is_equal(base85::encode("\0")      , '!!', "Encode: Null");
-is_equal(base85::encode("\0\0\0\0"), 'z' , 'Encode: Four nulls');
-is_equal(base85::encode(' ')       , '+9', "Encode: Single space");
-is_equal(base85::encode('    ')    , 'y' , "Encode: Four spaces = 'y'");
+$one  = chr(0);
+$four = chr(0) . chr(0) . chr(0) . chr(0);
+
+is_equal(base85::encode($one)  , '!!', "Encode: Null");
+is_equal(base85::encode($four) , 'z' , 'Encode: Four nulls');
+is_equal(base85::encode(' ')   , '+9', "Encode: Single space");
+is_equal(base85::encode('    '), 'y' , "Encode: Four spaces = 'y'");
 
 is_equal(base85::encode("food\0bat")       , 'AoDTu!+KAY'    , "Encode: Null in middle");
 is_equal(base85::encode("bird\0\0\0\0bath"), '@VKjnz@UX@l'   , 'Encode: Four null in middle');
