@@ -6,20 +6,21 @@ require($file);
 $pass_count = 0;
 $fail_count = 0;
 
-$arg_str = join(" ", $argv);
-$filter  = "";
-if (preg_match("/--filter (\w+)/", $arg_str, $m)) {
-	$filter = $m[1];
-}
+$long_opts = ['filter:', 'encode:', 'decode:'];
+$params    = getopt("", $long_opts);
+
+$filter = $params['filter'] ?? "";
+$encode = $params['encode'] ?? "";
+$decode = $params['decode'] ?? "";
 
 // Check if we're doing an --encode test
-if (preg_match("/--encode (\w+)/", $arg_str, $m)) {
+if ($encode) {
 	print base85::encode($m[1], 2) . "\n";
 	die;
 }
 
 // Check if we're doing a --decode test
-if (preg_match("/--decode (.+?)(\s|$)/", $arg_str, $m)) {
+if ($decode) {
 	print base85::decode($m[1], 2) . "\n";
 	die;
 }
