@@ -52,12 +52,13 @@ function is_equal($input, $expected, $name = "") {
 	global $pass_count;
 	global $fail_count;
 
+	$x    = debug_backtrace();
+	$file = $x[0]['file'];
+	$line = $x[0]['line'];
+
 	if ($name) {
 		$test_name = $name;
 	} else {
-		$x         = debug_backtrace();
-		$file      = $x[0]['file'];
-		$line      = $x[0]['line'];
 		$test_name = basename($file) . "#$line";
 	}
 
@@ -78,6 +79,7 @@ function is_equal($input, $expected, $name = "") {
 	} else {
 		print $lead . $pad . $fail_str . "\n";
 		print "  * Expected '$expected' got '$input'\n";
+		print "  * $file on line #$line\n";
 
 		$fail_count++;
 	}
