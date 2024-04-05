@@ -10,6 +10,11 @@ class base85
 {
 
 	public static function decode($str, $debug = 0) {
+		if ($debug) {
+			print "\$input = '$str';\n";
+			$len = strlen($str);
+		}
+
 		$str = preg_replace("/ \t\r\n\f/","",$str);
 		$str = preg_replace("/z/","!!!!!",$str);
 		$str = preg_replace("/y/","+<VdL/",$str);
@@ -20,6 +25,10 @@ class base85
 			$padding = 0;
 		}
 		$str .= str_repeat('u',$padding);
+
+		if ($debug) {
+			print "Length: $len Padding: $padding\n";
+		}
 
 		$num = 0;
 		$ret = '';
@@ -34,7 +43,13 @@ class base85
 			}
 
 			// Convert the integer in to a string
-			$ret .= pack('N', $tmp);
+
+			$part = pack('N', $tmp);
+			$ret .= $part;
+
+			if ($debug > 1) {
+				printf("  * Chunk #%02d = %s / %s\n", $num + 1, $tmp, $part);
+			}
 
 			$num++;
 		}
@@ -95,7 +110,10 @@ class base85
 	public static function encode64($str, $debug = 0) {
 		$ret = "";
 
+		$count = 0;
 		foreach (unpack('N*',$str) as $chunk) {
+			$count++;
+
 			// If there is an all zero chunk, it has a shortcut of 'z'
 			if ($chunk == 0) {
 				$ret .= "z";
@@ -109,8 +127,7 @@ class base85
 			}
 
 			if ($debug) {
-				var_dump($chunk);
-				//print "<br />\n";
+				printf("Chunk #%02d = %d\n", $count, $chunk);
 			}
 
 			// Convert the integer into 5 "quintet" chunks
@@ -118,13 +135,19 @@ class base85
 				$b	= intval($chunk / (pow(85,4 - $a)));
 				$ret .= chr($b + 33);
 
-				if ($debug) {
-					//printf("%03d = %s <br />\n",$b,chr($b+33));
+				if ($debug > 1) {
+					printf("  %03d = %s\n",$b,chr($b+33));
 				}
 
 				$chunk -= $b * pow(85,4 - $a);
 			}
 		}
+
+		return $ret;
+	}
+
+	public static function is_printable($input) {
+		$ret = ctype_print($input);
 
 		return $ret;
 	}
@@ -138,7 +161,12 @@ class base85
 		}
 
 		if ($debug) {
-			printf("\$input = hex2bin(%s);\n", bin2hex($str));
+			if (self::is_printable($str)) {
+				print "\$input = '$str';\n";
+			} else {
+				printf("\$input = hex2bin('%s');\n", bin2hex($str));
+			}
+
 			printf("Length: %d bytes / Padding: %s\n",strlen($str),$padding);
 			print "\n";
 		}
