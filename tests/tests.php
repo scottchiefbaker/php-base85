@@ -7,9 +7,21 @@ $pass_count = 0;
 $fail_count = 0;
 
 $arg_str = join(" ", $argv);
-$filter = "";
+$filter  = "";
 if (preg_match("/--filter (\w+)/", $arg_str, $m)) {
 	$filter = $m[1];
+}
+
+// Check if we're doing an --encode test
+if (preg_match("/--encode (\w+)/", $arg_str, $m)) {
+	print base85::encode($m[1], 2) . "\n";
+	die;
+}
+
+// Check if we're doing a --decode test
+if (preg_match("/--decode (.+?)(\s|$)/", $arg_str, $m)) {
+	print base85::decode($m[1], 2) . "\n";
+	die;
 }
 
 $one  = chr(0);
