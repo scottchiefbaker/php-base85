@@ -97,7 +97,7 @@ class base85
 
 		foreach (unpack('N*',$str) as $chunk) {
 			// If there is an all zero chunk, it has a shortcut of 'z'
-			if ($chunk == "\0") {
+			if ($chunk == 0) {
 				$ret .= "z";
 				continue;
 			}
