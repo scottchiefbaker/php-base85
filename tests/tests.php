@@ -6,6 +6,12 @@ require($file);
 $pass_count = 0;
 $fail_count = 0;
 
+$arg_str = join(" ", $argv);
+$filter = "";
+if (preg_match("/--filter (\w+)/", $arg_str, $m)) {
+	$filter = $m[1];
+}
+
 $one  = chr(0);
 $four = chr(0) . chr(0) . chr(0) . chr(0);
 
@@ -58,11 +64,17 @@ is_equal(base85::decode('*f_`K4Dd$)@O^eMIeR]@:`\'5)'), $bytes, "Decode: Unprinta
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-print "\n";
-
 $green = "\033[38;5;10m";
 $red   = "\033[38;5;9m";
 $reset = "\033[0m";
+
+// Make sure we ran SOME tests
+if ($pass_count === 0 && $fail_count === 0) {
+	print $red . "No tests were run?\n" . $reset;
+	exit(9);
+}
+
+print "\n";
 
 if ($fail_count) {
 	print $red . "$fail_count tests failed\n" . $reset;
@@ -76,6 +88,7 @@ if ($fail_count) {
 function is_equal($input, $expected, $name = "") {
 	global $pass_count;
 	global $fail_count;
+	global $filter;
 
 	$x    = debug_backtrace();
 	$file = $x[0]['file'];
@@ -85,6 +98,10 @@ function is_equal($input, $expected, $name = "") {
 		$test_name = $name;
 	} else {
 		$test_name = basename($file) . "#$line";
+	}
+
+	if ($filter && !preg_match("/$filter/i", $test_name)) {
+		return;
 	}
 
 	$lead = "$test_name ";
