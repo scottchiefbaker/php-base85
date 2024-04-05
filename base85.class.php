@@ -6,7 +6,7 @@
 // $str = base85::encode("Hello world!");
 // $str = base85::decode(":e4D*;K$&\Er");
 
-class base85 
+class base85
 {
 
 	public static function decode($str) {
@@ -45,21 +45,55 @@ class base85
 		return $ret;
 	}
 
-	public static function encode($str) {
-		$ret   = '';
-		$debug = 0;
+	public static function encode32($str, $debug = 0) {
+		$ret   = "";
+		$count = 1;
 
-		$padding = 4 - (strlen($str) % 4);
-		if (strlen($str) % 4 === 0) {
-			$padding = 0;
+		// We loop through $str pulling out four bytes at a time and building an integer
+		while ($str) {
+			$chunk = (ord($str[0]) << 24) + (ord($str[1]) << 16) + (ord($str[2]) << 8) + (ord($str[3]));
+			$chunk = sprintf("%u", $chunk);
+			$chunk = gmp_init($chunk);
+
+			// We've processed these four bytes so we remove them
+			$str = substr($str, 4);
+
+			if ($debug) {
+				printf("byte #%d = %s<br />\n", $count, gmp_strval($chunk));
+				$count++;
+			}
+
+			// If there is an all zero chunk, it has a shortcut of 'z'
+			if (gmp_cmp($chunk, 0) == 0) {
+				$ret .= "z";
+				continue;
+			}
+
+			// Four spaces has a shortcut of 'y'
+			if (gmp_cmp($chunk, 538976288) == 0) {
+				$ret .= "y";
+				continue;
+			}
+
+			// Convert the integer into 5 "quintet" chunks
+			for ($a = 0; $a < 5; $a++) {
+				$part = gmp_pow(85, 4 - $a);
+				$b    = gmp_intval(gmp_div_q($chunk, $part));
+				$ret .= chr($b + 33);
+
+				if ($debug > 1) {
+					printf("%03d = %s <br />\n",$b,chr($b+33));
+				}
+
+				$chunk -= gmp_mul($b, $part);
+			}
 		}
 
-		if ($debug) {
-			printf("Length: %d = Padding: %s<br /><br />\n",strlen($str),$padding);
-		}
+		return $ret;
+	}
 
-		// If we don't have a four byte chunk, append \0s
-		$str .= str_repeat("\0", $padding);
+	public static function encode64($str, $debug = 0) {
+		$ret = "";
 
 		foreach (unpack('N*',$str) as $chunk) {
 			// If there is an all zero chunk, it has a shortcut of 'z'
@@ -75,7 +109,8 @@ class base85
 			}
 
 			if ($debug) {
-				var_dump($chunk); print "<br />\n";
+				var_dump($chunk);
+				//print "<br />\n";
 			}
 
 			// Convert the integer into 5 "quintet" chunks
@@ -84,12 +119,45 @@ class base85
 				$ret .= chr($b + 33);
 
 				if ($debug) {
-					printf("%03d = %s <br />\n",$b,chr($b+33));
+					//printf("%03d = %s <br />\n",$b,chr($b+33));
 				}
 
 				$chunk -= $b * pow(85,4 - $a);
 			}
 		}
+
+		return $ret;
+	}
+
+	public static function encode($str) {
+		$ret   = '';
+		$debug = 0;
+
+		$padding = 4 - (strlen($str) % 4);
+		if (strlen($str) % 4 === 0) {
+			$padding = 0;
+		}
+
+		if ($debug) {
+			printf("\$input = hex2bin(%s);\n", bin2hex($str));
+			printf("Length: %d bytes / Padding: %s\n",strlen($str),$padding);
+			print "\n";
+		}
+
+		// If we don't have a four byte chunk, append \0s
+		$str .= str_repeat("\0", $padding);
+
+		///////////////////////////////////////////////////////////////////////////
+
+		$is_32bit = PHP_INT_SIZE == 4;
+
+		if ($is_32bit) {
+			$ret = base85::encode32($str, $debug);
+		} else {
+			$ret = base85::encode64($str, $debug);
+		}
+
+		///////////////////////////////////////////////////////////////////////////
 
 		// If we added some null bytes, we remove them from the final string
 		if ($padding) {
