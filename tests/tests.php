@@ -9,6 +9,10 @@ $fail_count = 0;
 $one  = chr(0);
 $four = chr(0) . chr(0) . chr(0) . chr(0);
 
+////////////////////////////////////////////
+// Encode
+////////////////////////////////////////////
+
 is_equal(base85::encode($one)  , '!!', "Encode: Null");
 is_equal(base85::encode($four) , 'z' , 'Encode: Four nulls');
 is_equal(base85::encode(' ')   , '+9', "Encode: Single space");
@@ -32,7 +36,25 @@ is_equal(base85::encode($bytes),'*f_`K4Dd$)@O^eMIeR]@:`\'5)', "Encode: Unprintab
 // Github issues
 is_equal(base85::encode(md5("test", true)),'$\'/lH7Np6%b2,mG-7?1o', "Encode: Github issue #2");
 
-// FIXME: Add some encode() tests
+////////////////////////////////////////////
+// Decode
+////////////////////////////////////////////
+
+is_equal(base85::decode('!!'), $one  , "Decode: Null");
+is_equal(base85::decode('z') , $four , 'Decode: Four nulls');
+is_equal(base85::decode('+9'), ' '   , "Decode: Single space");
+is_equal(base85::decode('y') , '    ', "Decode: Four spaces = 'y'");
+
+is_equal(base85::decode("AoDTu!+KAY") , "food\0bat"       , "Decode: Null in middle");
+is_equal(base85::decode('@VKjnz@UX@l'), "bird\0\0\0\0bath", 'Decode: Four null in middle');
+
+is_equal(base85::decode('6ofBkC1pf')   , 'D9uWjh['  , "Decode: String #1");
+is_equal(base85::decode('8jc0F@7G!;@K'), 'JCINaFj]b', "Decode: String #2");
+is_equal(base85::decode('CMm!BGBE')    , 'knQKwu'   , "Decode: String #3");
+is_equal(base85::decode('7QF%BCi)Z')   , 'F9IXlmG'  , "Decode: String #4");
+
+$bytes  = base64_decode("Ho4q/TxtN3xiKfBafvdtkFAYAZ4=");
+is_equal(base85::decode('*f_`K4Dd$)@O^eMIeR]@:`\'5)'), $bytes, "Decode: Unprintable chars");
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
