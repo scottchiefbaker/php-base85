@@ -9,7 +9,7 @@
 class base85
 {
 
-	public static function decode($str) {
+	public static function decode($str, $debug = 0) {
 		$str = preg_replace("/ \t\r\n\f/","",$str);
 		$str = preg_replace("/z/","!!!!!",$str);
 		$str = preg_replace("/y/","+<VdL/",$str);
@@ -129,9 +129,8 @@ class base85
 		return $ret;
 	}
 
-	public static function encode($str) {
+	public static function encode($str, $debug = 0) {
 		$ret   = '';
-		$debug = 0;
 
 		$padding = 4 - (strlen($str) % 4);
 		if (strlen($str) % 4 === 0) {
