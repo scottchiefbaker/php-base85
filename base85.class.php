@@ -112,6 +112,17 @@ class base85
 
 		$count = 0;
 		foreach (unpack('N*',$str) as $chunk) {
+			// 32bit PHP can't do numbers larger than 2^31 and they come back as
+			// negative instead. If we get a negative chunk we process it the slow
+			// way instead.
+			if ($chunk < 0) {
+				$bytes = substr($str, $count * 4, 4);
+				$tmp   = self::encode32($bytes);
+
+				$ret .= $tmp;
+				continue;
+			}
+
 			$count++;
 
 			// If there is an all zero chunk, it has a shortcut of 'z'
@@ -176,13 +187,7 @@ class base85
 
 		///////////////////////////////////////////////////////////////////////////
 
-		$is_32bit = PHP_INT_SIZE == 4;
-
-		if ($is_32bit) {
-			$ret = base85::encode32($str, $debug);
-		} else {
-			$ret = base85::encode64($str, $debug);
-		}
+		$ret = base85::encode64($str, $debug);
 
 		///////////////////////////////////////////////////////////////////////////
 
