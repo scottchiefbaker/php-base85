@@ -170,6 +170,15 @@ class base85
 
 	public static function encode($str, $debug = 0) {
 		$ret   = '';
+		$first = true;
+
+		// Check if we're on 32bit
+		if ($first) {
+			$first = false;
+			if (PHP_INT_SIZE === 4 && !function_exists("gmp_init")) {
+				print "<p><b>BASE85 Warning:</b> 32bit systems require the GMP extension.</p>";
+			}
+		}
 
 		$padding = 4 - (strlen($str) % 4);
 		if (strlen($str) % 4 === 0) {
