@@ -15,13 +15,15 @@ $decode = $params['decode'] ?? "";
 
 // Check if we're doing an --encode test
 if ($encode) {
-	print base85::encode($m[1], 2) . "\n";
+	$enc = base85::encode($encode, 2) . "\n";
+	print "Encoded: $enc\n";
 	die;
 }
 
 // Check if we're doing a --decode test
 if ($decode) {
-	print base85::decode($m[1], 2) . "\n";
+	$dec = base85::decode($decode, 2) . "\n";
+	print "Decoded: $dec\n";
 	die;
 }
 
