@@ -64,14 +64,17 @@ class base85
 		$ret   = "";
 		$count = 1;
 
+		$i     = 0;
+		$mylen = strlen($str);
+
 		// We loop through $str pulling out four bytes at a time and building an integer
-		while ($str) {
-			$chunk = (ord($str[0]) << 24) + (ord($str[1]) << 16) + (ord($str[2]) << 8) + (ord($str[3]));
+		while ($i < $mylen) {
+			$chunk = (ord($str[$i + 0]) << 24) + (ord($str[$i + 1]) << 16) + (ord($str[$i + 2]) << 8) + (ord($str[$i + 3]));
 			$chunk = sprintf("%u", $chunk);
 			$chunk = gmp_init($chunk);
 
 			// We've processed these four bytes so we remove them
-			$str = substr($str, 4);
+			$i += 4;
 
 			if ($debug) {
 				printf("byte #%d = %s<br />\n", $count, gmp_strval($chunk));
