@@ -34,10 +34,11 @@ $four = chr(0) . chr(0) . chr(0) . chr(0);
 // Encode
 ////////////////////////////////////////////
 
-is_equal(base85::encode($one)  , '!!', "Encode: Null");
-is_equal(base85::encode($four) , 'z' , 'Encode: Four nulls');
-is_equal(base85::encode(' ')   , '+9', "Encode: Single space");
-is_equal(base85::encode('    '), 'y' , "Encode: Four spaces = 'y'");
+is_equal(base85::encode($one)          , '!!'          , "Encode: Null");
+is_equal(base85::encode($four)         , 'z'           , 'Encode: Four nulls');
+is_equal(base85::encode(' ')           , '+9'          , "Encode: Single space");
+is_equal(base85::encode('    ')        , 'y'           , "Encode: Four spaces = 'y'");
+is_equal(base85::encode('1111    2222'), '0ekC;y1,:U?' , "Encode: Four spaces in middle of string");
 
 is_equal(base85::encode("food\0bat")       , 'AoDTu!+KAY'    , "Encode: Null in middle");
 is_equal(base85::encode("bird\0\0\0\0bath"), '@VKjnz@UX@l'   , 'Encode: Four null in middle');
@@ -69,10 +70,11 @@ is_equal(base85::decode('y') , '    ', "Decode: Four spaces = 'y'");
 is_equal(base85::decode("AoDTu!+KAY") , "food\0bat"       , "Decode: Null in middle");
 is_equal(base85::decode('@VKjnz@UX@l'), "bird\0\0\0\0bath", 'Decode: Four null in middle');
 
-is_equal(base85::decode('6ofBkC1pf')   , 'D9uWjh['  , "Decode: String #1");
-is_equal(base85::decode('8jc0F@7G!;@K'), 'JCINaFj]b', "Decode: String #2");
-is_equal(base85::decode('CMm!BGBE')    , 'knQKwu'   , "Decode: String #3");
-is_equal(base85::decode('7QF%BCi)Z')   , 'F9IXlmG'  , "Decode: String #4");
+is_equal(base85::decode('6ofBkC1pf')   , 'D9uWjh['     , "Decode: String #1");
+is_equal(base85::decode('8jc0F@7G!;@K'), 'JCINaFj]b'   , "Decode: String #2");
+is_equal(base85::decode('CMm!BGBE')    , 'knQKwu'      , "Decode: String #3");
+is_equal(base85::decode('7QF%BCi)Z')   , 'F9IXlmG'     , "Decode: String #4");
+is_equal(base85::decode('0ekC;y1,:U?') , '1111    2222', "Encode: Four spaces in middle of string");
 
 $bytes  = base64_decode("Ho4q/TxtN3xiKfBafvdtkFAYAZ4=");
 is_equal(base85::decode('*f_`K4Dd$)@O^eMIeR]@:`\'5)'), $bytes, "Decode: Unprintable chars");
