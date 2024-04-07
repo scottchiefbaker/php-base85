@@ -43,6 +43,7 @@ is_equal(base85::encode('1111    2222'), '0ekC;y1,:U?' , "Encode: Four spaces in
 is_equal(base85::encode("food\0bat")       , 'AoDTu!+KAY'    , "Encode: Null in middle");
 is_equal(base85::encode("bird\0\0\0\0bath"), '@VKjnz@UX@l'   , 'Encode: Four null in middle');
 is_equal(base85::encode("Hello world")     , '87cURD]j7BEbo7', "Encode: Hello world");
+is_equal(base85::encode("©Ożar")           , '_Pp>M]O>g'     , "Encode: Two unicode bytes");
 
 is_equal(base85::encode('The quick brown fox jumps over the lazy dog.'),'<+ohcEHPu*CER),Dg-(AAoDo:C3=B4F!,CEATAo8BOr<&@=!2AA8c*5', "Encode: Quick brown fox");
 
@@ -69,6 +70,7 @@ is_equal(base85::decode('y') , '    ', "Decode: Four spaces = 'y'");
 
 is_equal(base85::decode("AoDTu!+KAY") , "food\0bat"       , "Decode: Null in middle");
 is_equal(base85::decode('@VKjnz@UX@l'), "bird\0\0\0\0bath", 'Decode: Four null in middle');
+is_equal(base85::decode("_Pp>M]O>g")  , "©Ożar"           , "Decode: Two unicode bytes");
 
 is_equal(base85::decode('6ofBkC1pf')   , 'D9uWjh['     , "Decode: String #1");
 is_equal(base85::decode('8jc0F@7G!;@K'), 'JCINaFj]b'   , "Decode: String #2");
