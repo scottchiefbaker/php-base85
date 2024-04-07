@@ -76,7 +76,7 @@ is_equal(base85::decode('6ofBkC1pf')   , 'D9uWjh['     , "Decode: String #1");
 is_equal(base85::decode('8jc0F@7G!;@K'), 'JCINaFj]b'   , "Decode: String #2");
 is_equal(base85::decode('CMm!BGBE')    , 'knQKwu'      , "Decode: String #3");
 is_equal(base85::decode('7QF%BCi)Z')   , 'F9IXlmG'     , "Decode: String #4");
-is_equal(base85::decode('0ekC;y1,:U?') , '1111    2222', "Encode: Four spaces in middle of string");
+is_equal(base85::decode('0ekC;y1,:U?') , '1111    2222', "Decode: Four spaces in middle of string");
 
 $bytes  = base64_decode("Ho4q/TxtN3xiKfBafvdtkFAYAZ4=");
 is_equal(base85::decode('*f_`K4Dd$)@O^eMIeR]@:`\'5)'), $bytes, "Decode: Unprintable chars");
