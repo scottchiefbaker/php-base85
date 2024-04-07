@@ -120,7 +120,7 @@ class base85
 			// way instead.
 			if ($chunk < 0) {
 				$bytes = substr($str, $count * 4, 4);
-				$tmp   = self::encode32($bytes);
+				$tmp   = self::encode32($bytes, $debug);
 
 				$ret .= $tmp;
 				continue;
