@@ -15,9 +15,9 @@ class base85
 			$len = strlen($str);
 		}
 
-		$str = preg_replace("/ \t\r\n\f/","",$str);
-		$str = preg_replace("/z/","!!!!!",$str);
-		$str = preg_replace("/y/","+<VdL",$str);
+		$str = preg_replace("/[ \t\r\n\f]/","",$str); // Remove whitespace
+		$str = preg_replace("/z/","!!!!!",$str);      // Shortcut for four zeros
+		$str = preg_replace("/y/","+<VdL",$str);      // Shortcut for four spaces
 
 		// Pad the end of the string so it's a multiple of 5
 		$padding = 5 - (strlen($str) % 5);
