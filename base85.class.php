@@ -48,7 +48,7 @@ class base85
 			$ret .= $part;
 
 			if ($debug > 1) {
-				printf("  * Chunk #%02d = %s / %s\n", $num + 1, $tmp, $part);
+				printf("  * Chunk #%02d = %s (%10d) => '%s'\n", $num + 1, $chunk, $tmp, $part);
 			}
 
 			$num++;
