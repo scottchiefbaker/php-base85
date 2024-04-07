@@ -17,7 +17,7 @@ class base85
 
 		$str = preg_replace("/ \t\r\n\f/","",$str);
 		$str = preg_replace("/z/","!!!!!",$str);
-		$str = preg_replace("/y/","+<VdL/",$str);
+		$str = preg_replace("/y/","+<VdL",$str);
 
 		// Pad the end of the string so it's a multiple of 5
 		$padding = 5 - (strlen($str) % 5);
