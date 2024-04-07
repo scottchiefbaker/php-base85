@@ -123,6 +123,8 @@ class base85
 				$tmp   = self::encode32($bytes, $debug);
 
 				$ret .= $tmp;
+				$count++;
+
 				continue;
 			}
 
