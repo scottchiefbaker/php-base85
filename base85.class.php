@@ -1,13 +1,10 @@
 <?PHP
 
-#error_reporting(E_ALL);
-
 // Examples:
 // $str = base85::encode("Hello world!");
 // $str = base85::decode(":e4D*;K$&\Er");
 
-class base85
-{
+class base85 {
 
 	public static function decode($str, $debug = 0) {
 		if ($debug) {
@@ -60,6 +57,9 @@ class base85
 		return $ret;
 	}
 
+	// 32bit version of the base85::encode(). This is 100% safe to run on 32bit
+	// systems. It is significantly slower than the encode64() version so it is
+	// only used in certain circumstances.
 	public static function encode32($str, $debug = 0) {
 		$ret   = "";
 		$count = 1;
@@ -110,6 +110,10 @@ class base85
 		return $ret;
 	}
 
+	// Native version that uses unpack() to convert each chunk to an integer.
+	// On 32bit systems this may fail for some larger than 2^31. If this is
+	// detected we fall back to encode32() which will work on 32bit systems
+	// but is slower
 	public static function encode64($str, $debug = 0) {
 		$ret = "";
 
@@ -162,12 +166,26 @@ class base85
 		return $ret;
 	}
 
+	// Are all the characters in a string printable
 	public static function is_printable($input) {
 		$ret = ctype_print($input);
 
 		return $ret;
 	}
 
+	// Encode is a wrapper around two functions:
+	//
+	// encode64() does all the math natively, but may break on numbers larger
+	// than 2^31 because 32bit PHP cannot store an int that large.
+	//
+	// encode32() is a slower version of the same function that works on
+	// numbers larger than 2^31 on 32bit systems.
+	//
+	// encode() will attempt to encode each chunk with encode64() because it's
+	// faster. If the number will not work because it's too large it will fallback
+	// to encode32().
+	//
+	// On 64bit systems the encode32() function should *never* end up being called.
 	public static function encode($str, $debug = 0) {
 		$ret   = '';
 		$first = true;
