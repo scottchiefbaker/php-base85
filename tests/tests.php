@@ -81,6 +81,39 @@ is_equal(base85::decode('0ekC;y1,:U?') , '1111    2222', "Decode: Four spaces in
 $bytes  = base64_decode("Ho4q/TxtN3xiKfBafvdtkFAYAZ4=");
 is_equal(base85::decode('*f_`K4Dd$)@O^eMIeR]@:`\'5)'), $bytes, "Decode: Unprintable chars");
 
+////////////////////////////////////////////
+// Empty strings
+////////////////////////////////////////////
+
+is_equal(base85::encode(''), '', "Encode: Empty string");
+is_equal(base85::decode(''), '', "Decode: Empty string");
+
+////////////////////////////////////////////
+// is_printable
+////////////////////////////////////////////
+
+is_equal(base85::is_printable('Hello world'), true , "is_printable: Printable ASCII");
+is_equal(base85::is_printable('abc123!@#')  , true , "is_printable: Printable punctuation");
+is_equal(base85::is_printable(' ')          , true , "is_printable: Single space");
+is_equal(base85::is_printable('')           , false, "is_printable: Empty string");
+is_equal(base85::is_printable("\n")         , false, "is_printable: Newline");
+is_equal(base85::is_printable("\t")         , false, "is_printable: Tab");
+is_equal(base85::is_printable(chr(0))       , false, "is_printable: Null byte");
+is_equal(base85::is_printable(chr(127))     , false, "is_printable: DEL byte");
+is_equal(base85::is_printable(chr(255))     , false, "is_printable: High byte");
+
+////////////////////////////////////////////////////////////////
+// Round-trip: encode() then decode() must reproduce the input
+////////////////////////////////////////////////////////////////
+
+for ($len = 1; $len <= 20; $len++) {
+	$original = random_bytes($len);
+	$encoded  = base85::encode($original);
+	$decoded  = base85::decode($encoded);
+
+	is_equal($decoded, $original, "Round-trip: $len random bytes");
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 $green = "\033[38;5;10m";
@@ -124,7 +157,8 @@ function is_equal($input, $expected, $name = "") {
 	}
 
 	$lead = "$test_name ";
-	$pad  = str_repeat(" ", 80 - (strlen($lead)));
+	// The whole line has to be less than 80 chars
+	$pad  = str_repeat(" ", max(0, 80 - (strlen($lead))));
 
 	$green    = "\033[38;5;10m";
 	$red      = "\033[38;5;9m";
